@@ -1,6 +1,9 @@
-import React from "react";
+import Usercontext from "../../contexts/UserContext";
+import { useContext } from "react";
 
 const Nav = () => {
+  const user = useContext(Usercontext);
+  console.log(user);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
