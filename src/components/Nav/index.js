@@ -1,13 +1,12 @@
-import Usercontext from "../../contexts/UserContext";
+import Usercontext from "../../contexts/Usercontext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 const Nav = () => {
   const user = useContext(Usercontext);
-  console.log(user, "nav");
+  console.log("nav", user);
 
-  //below we will use Link from react to replace all of our anchor tags <a>
-  // and us to replace the hrefs
+  // Below we will use Link from react router to replace all of our anchor tags. We replace the href from <a> to "to"
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -18,29 +17,38 @@ const Nav = () => {
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <Link
-              className="nav-link active"
-              aria-current="page"
-              to="pokemon/list"
-            >
-              Pokemon-List
-            </Link>
-            <Link className="nav-link" to="Login">
-              Login
-            </Link>
-            <Link className="nav-link" to="favorites">
-              Favorites
-            </Link>
-          </div>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to="pokemon/list"
+              >
+                Pokemon List
+              </Link>
+            </li>
+            {!user ? (
+              <li className="nav-item">
+                <Link className="nav-link" to="login">
+                  Login
+                </Link>
+              </li>
+            ) : (
+              <li className="nav-item">
+                <Link className="nav-link" to="favorites">
+                  Favorites
+                </Link>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </nav>

@@ -1,40 +1,46 @@
 import { useState } from "react";
 import React from "react";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 //destructiong props allos us to not sya props.user
 const Login = ({ setUser }) => {
-  //mx auto centers it
-  //once user clicks submiy  we will mimic loggin in and conditionally render pur nav bar
-  // must add e paramaater in the funtions or tehy will not knowe when to fire
+  // Once the user clicks submit, we will mimic logging in and conditionally render our nav bar.
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setUsername(e.target.value);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setUser(username);
+
+    // We can use useNavigate from RR to redirect our users to a different component/page
+    // DO NOT FORGET the forward / in front of path in navigate()
+    navigate("/pokemon/list");
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="Login-form"
       className="mx-auto border p-2 m-2"
+      id="login-form"
+      onSubmit={handleSubmit}
     >
       <div className="mb-3">
         <label htmlFor="exampleInputUser1" className="form-label">
-          Email address
+          Username
         </label>
         <input
           type="text"
           className="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
+          id="exampleInputUser1"
+          aria-describedby="userHelp"
+          value={username}
           onChange={handleChange}
         />
         <div id="userHelp" className="form-text">
-          We'll never share your user with anyone else.
+          We'll never share your username with anyone else.
         </div>
       </div>
       <div className="mb-3">
@@ -47,7 +53,6 @@ const Login = ({ setUser }) => {
           id="exampleInputPassword1"
         />
       </div>
-
       <button type="submit" className="btn btn-primary">
         Submit
       </button>

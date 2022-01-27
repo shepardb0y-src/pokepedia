@@ -1,31 +1,64 @@
-import "./App.css";
+import { useState, useContext, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import axios from "axios";
+// components
 import Nav from "./components/Nav";
-
-import Usercontext from "./contexts/UserContext";
-import { useContext, useState } from "react";
+// pages
+import Home from "./pages/Home";
 import Login from "./pages/Login";
-import { Route, Routes } from "react-router-dom";
-function App() {
-  // to use context we have to import it
-  //then we use the use context hook
-  // const user = useContext(Usercontext);
-  // console.log(user);
-  // all context come with the provider component. this allowas us to use User.PRrovider as a wrapper component to be able to share information with children components. we need a value prop in the User Provider
-  //we doo all of this so we dont have to de involved in prop drilling
-  //wrap all of our routes inside react router Routes coomponent
-  //the routed path is rendering the proped element
-  // Pass on user to all apps children vis Provider props and the lift state
+import PokemonList from "./pages/PokemonList";
+// contexts
+import UserContext from "./contexts/Usercontext.js";
+// css
+import "./App.css";
+
+const App = () => {
+  // In able for us to use our context, we import first, then we can use the useContext hook to access our context
+  // const user = useContext(UserContext)
+  // console.log(user)
+
+  // We will pass on our user to all of App's children via the Provider value prop
   const [user, setUser] = useState("");
+  const [pokeList, setPokeList] = useState([]);
+
+  useEffect(() => {
+    fetchPokemon();
+
+    // Dependency array: if empty, it will call useEffect once only when DOM Component loads
+  }, []);
+
+  const fetchPokemon = async () => {
+    try {
+      const response = await axios.get(
+        "https://pokeapi.co/api/v2/pokemon?limit=1118"
+      );
+
+      setPokeList(response.data.results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // console.log('pokeList', pokeList)
+
   return (
     <div className="App">
-      <Usercontext.Provider value={user}>
+      {/* All context comes with the Provider Component. This allows us to use this as a wrapper and share information to all of its children. We need the value prop inside our provider. */}
+      <UserContext.Provider value={user}>
         <Nav />
+
+        {/* We need to wrap our all of our routes inside react router Routes component */}
         <Routes>
-          <Route path="Login" element={<Login setUser={setUser} />}></Route>
+          <Route path="/" element={<Home />} />
+          <Route path="login" element={<Login setUser={setUser} />} />
+          <Route
+            path="pokemon/list"
+            element={<PokemonList pokeList={pokeList} itemsPerPage={8} />}
+          />
         </Routes>
-      </Usercontext.Provider>
+      </UserContext.Provider>
     </div>
   );
-}
+};
 
 export default App;
